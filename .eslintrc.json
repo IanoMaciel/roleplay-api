@@ -1,4 +1,6 @@
 {
+    "root": true,
+    "parser": "@typescript-eslint/parser",
     "extends": ["plugin:adonis/typescriptApp", "prettier"],
     "plugins": ["prettier"],
     "rules": {
