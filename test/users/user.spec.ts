@@ -23,7 +23,7 @@ test.group('User', (group) => {
     const { body } = await supertest(BASE_URL).post('/users').send({
       email,
       username: 'test',
-      password: 'test',
+      password: 'test122',
       avatar: 'http://test.com'
     }).expect(409)
 
@@ -40,7 +40,7 @@ test.group('User', (group) => {
     const { body } = await supertest(BASE_URL).post('/users').send({
       username,
       email: 'test@test.com',
-      password: 'test',
+      password: 'test222',
       avatar: 'http://test.com'
     }).expect(409)
 
@@ -54,7 +54,28 @@ test.group('User', (group) => {
 
   test('it should return 422 when required data is not provided', async (assert) => {
     const { body } = await supertest(BASE_URL).post('/users').send({}).expect(422)
+    assert.equal(body.code, 'BAD_REQUEST')
+    assert.equal(body.status, 422)
+  })
 
+  test('it should return 422 when providing an invalid email address', async (assert) => {
+    const { body } = await supertest(BASE_URL).post('/users').send({
+      test: 'test@',
+      password: 'p123456',
+      username: 'ianooo_',
+      avatar: 'http://ianodev.com'
+    }).expect(422)
+    assert.equal(body.code, 'BAD_REQUEST')
+    assert.equal(body.status, 422)
+  })
+
+  test('it should return 422 when providing an invalid password', async (assert) => {
+    const { body } = await supertest(BASE_URL).post('/users').send({
+      test: 'test@test.com',
+      password: '1',
+      username: 'ianooo_',
+      avatar: 'http://ianodev.com'
+    }).expect(422)
     assert.equal(body.code, 'BAD_REQUEST')
     assert.equal(body.status, 422)
   })
