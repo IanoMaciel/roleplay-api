@@ -2,6 +2,7 @@ import Database from '@ioc:Adonis/Lucid/Database'
 import { UserFactory } from 'Database/factories'
 import test from 'japa'
 import supertest from 'supertest'
+import Hash from '@ioc:Adonis/Core/Hash'
 
 const BASE_URL = `http://${process.env.HOST}:${process.env.PORT}`
 
@@ -80,7 +81,7 @@ test.group('User', (group) => {
     assert.equal(body.status, 422)
   })
 
-  test.only('it should update an user', async (assert) => {
+  test('it should update an user', async (assert) => {
     const { id, password } = await UserFactory.create()
     const email = 'test@test.com'
     const avatar = 'https://test.com.br'
@@ -98,6 +99,25 @@ test.group('User', (group) => {
     assert.equal(body.user.id, id)
   })
 
+  test('it should update the password of the user', async (assert) => {
+    const user = await UserFactory.create()
+    const password = '1234567'
+
+    const { body } = await supertest(BASE_URL)
+      .put(`/users/${user.id}`).send({
+        email: user.email,
+        avatar: user.avatar,
+        password
+      }).expect(200)
+
+    assert.exists(body.user, 'user undefined')
+    assert.equal(body.user.id, user.id)
+
+    await user.refresh()
+
+    assert.isTrue(await Hash.verify(user.password, password))
+  })
+
   group.beforeEach(async () => {
     await Database.beginGlobalTransaction()
   })
@@ -105,5 +125,4 @@ test.group('User', (group) => {
   group.afterEach(async () => {
     await Database.rollbackGlobalTransaction()
   })
-
 })
