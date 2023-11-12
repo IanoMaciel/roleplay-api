@@ -11,7 +11,10 @@ test.group('Password', (group) => {
   test.only('it should send and email with forgot password instructions', async (assert) => {
     const user = await UserFactory.create()
     Mail.trap((message) => {
+      assert.deepEqual(message.to, [{ address: user.email }])
+      assert.deepEqual(message.from, { address: 'no-replay@roleplay.com' })
       assert.equal(message.subject, 'Roleplay: Recuperação de senha')
+      assert.equal(message.text, 'Clique no link abaixo para redefinição de senha')
     })
     await supertest(BASE_URL).post('/forgot-password').send({
       email: user.email,
