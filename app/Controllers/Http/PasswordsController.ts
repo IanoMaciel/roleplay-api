@@ -1,16 +1,22 @@
 import Mail from '@ioc:Adonis/Addons/Mail'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { UserFactory } from 'Database/factories'
+import User from 'App/Models/User'
 
 export default class PasswordsController {
   public async forgotPassword({ request, response }: HttpContextContract) {
-    const { email } = request.only(['email'])
+    const { email, resetPasswordUrl  } = request.only(['email', 'resetPasswordUrl'])
+    const user = await User.findByOrFail('email', email)
+
     await Mail.send((message) => {
       message
         .from('no-replay@roleplay.com')
         .to(email)
         .subject('Roleplay: Recuperação de senha')
-        .text('Clique no link abaixo para redefinição de senha')
+        .htmlView('email/forgotpassword', {
+          productName: 'Roleplay',
+          name: user.username,
+          resetPasswordUrl,
+        })
     })
     return response.noContent()
 
