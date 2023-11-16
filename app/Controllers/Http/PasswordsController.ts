@@ -42,10 +42,11 @@ export default class PasswordsController {
 
     const userByToken = await User.query().whereHas('tokens', (query) => {
       query.where('token', token)
-    }).firstOrFail()
+    }).preload('tokens').firstOrFail()
 
     userByToken.password = password
     await userByToken.save()
+    await userByToken.tokens[0].delete()
 
     return response.noContent()
   }
