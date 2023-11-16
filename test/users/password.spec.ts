@@ -47,7 +47,7 @@ test.group('Password', (group) => {
     assert.equal(body.status, 422)
   })
 
-  test.only('it should be able to reset password', async (assert) => {
+  test('it should be able to reset password', async (assert) => {
     const user = await UserFactory.create()
     const { token } = await user.related('tokens').create({ token: 'token' })
 
@@ -57,6 +57,12 @@ test.group('Password', (group) => {
     const checkPassword = await Hash.verify(user.password, '1234567')
 
     assert.isTrue(checkPassword)
+  })
+
+  test.only('it should return 422 when required data is not provided or data is invalid', async (assert) => {
+    const { body } = await supertest(BASE_URL).post('/reset-password').send({}).expect(422)
+    assert.equal(body.code, 'BAD_REQUEST')
+    assert.equal(body.status, 422)
   })
 
   group.beforeEach(async () => {
