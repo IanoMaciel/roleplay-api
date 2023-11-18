@@ -20,7 +20,7 @@ test.group('Sesseion', (group) => {
     assert.equal(body.user.id, id)
   })
 
-  test.only('it should return an api token when session is created', async (assert) => {
+  test('it should return an api token when session is created', async (assert) => {
     const plainPassword = '1234567'
     const { id, email } = await UserFactory.merge({ password: plainPassword }).create()
     const { body } = await supertest(BASE_URL).post('/sessions').send({
@@ -32,6 +32,11 @@ test.group('Sesseion', (group) => {
     assert.equal(body.user.id, id)
   })
 
+  test('it should return 400 when credentials are not provided', async (assert) => {
+    const { body } = await supertest(BASE_URL).post('/sessions').send().expect(400)
+    assert.equal(body.code, 'BAD_REQUEST')
+    assert.equal(body.status, 400)
+  })
   group.beforeEach(async () => {
     await Database.beginGlobalTransaction()
   })
