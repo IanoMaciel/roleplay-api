@@ -38,7 +38,7 @@ test.group('Sesseion', (group) => {
     assert.equal(body.status, 400)
   })
 
-  test.only('it should return 400 when credentials are invalid', async (assert) => {
+  test('it should return 400 when credentials are invalid', async (assert) => {
     const { email } = await UserFactory.create()
     const { body } = await supertest(BASE_URL).post('/sessions').send({
       email,
@@ -47,6 +47,22 @@ test.group('Sesseion', (group) => {
     assert.equal(body.code, 'BAD_REQUEST')
     assert.equal(body.status, 400)
     assert.equal(body.message, 'invalid credentials')
+  })
+
+  test.only('it should return 200 when user signs out', async (assert) => {
+    const plainPassword = '1234567'
+    const { id, email } = await UserFactory.merge({ password: plainPassword }).create()
+    const { body } = await supertest(BASE_URL).post('/sessions').send({
+      email,
+      password: plainPassword
+    }).expect(201)
+
+    const apiToken = body.token
+
+    await supertest(BASE_URL)
+      .delete('/sessions')
+      .set('Authorization', `Bearer ${apiToken.token}`)
+      .expect(200)
   })
 
   group.beforeEach(async () => {
