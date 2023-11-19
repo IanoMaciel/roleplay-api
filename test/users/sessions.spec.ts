@@ -14,8 +14,6 @@ test.group('Sesseion', (group) => {
       password: plainPassword
     }).expect(201)
 
-    console.log({ body })
-
     assert.isDefined(body.user, 'User undefined')
     assert.equal(body.user.id, id)
   })
