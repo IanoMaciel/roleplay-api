@@ -7,11 +7,6 @@ import UpdateUser from 'App/Validators/UpdateUserValidator'
 export default class UsersController {
   public async store({ request, response }: HttpContextContract) {
     const userPayload = await request.validate(CreateUser)
-    //const userPayload = request.only(['email', 'username', 'password', 'avatar'])
-
-    // if (!userPayload.email || !userPayload.username || !userPayload.password)
-    //   throw new BadRequest('provide required data', 422)
-
     const userByEmail = await User.findBy('email', userPayload.email)
     const userByUsername = await User.findBy('username', userPayload.username)
 
@@ -22,10 +17,12 @@ export default class UsersController {
     return response.created({ user })
   }
 
-  public async update({ request, response }: HttpContextContract) {
+  public async update({ request, response, bouncer }: HttpContextContract) {
     const {email, avatar, password} = await request.validate(UpdateUser)
     const id = request.param('id')
     const user = await User.findOrFail(id)
+
+    await bouncer.authorize('updateUser', user)
 
     user.email = email
     user.password = password
