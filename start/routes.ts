@@ -35,4 +35,4 @@ Route.post('/sessions', 'SessionsController.store')
 Route.delete('/sessions', 'SessionsController.destroy')
 
 // Groups
-Route.post('/groups', 'GroupsController.store')
+Route.post('/groups', 'GroupsController.store').middleware('auth')
