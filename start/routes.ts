@@ -37,4 +37,5 @@ Route.delete('/sessions', 'SessionsController.destroy')
 // Groups
 Route.post('/groups', 'GroupsController.store').middleware('auth')
 
+Route.get('/groups/:groupId/requests', 'GroupRequestsController.index')//.middleware('auth')
 Route.post('/groups/:groupId/requests', 'GroupRequestsController.store').middleware('auth')
