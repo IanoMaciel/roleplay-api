@@ -6,6 +6,9 @@ import GroupRequest from 'App/Models/GroupRequest'
 export default class GroupRequestsController {
   public async index({ request, response }: HttpContextContract) {
     const { master } = request.qs()
+
+    if(!master) throw new BadRequest('Master query should be provied', 422)
+
     const groupRequests = await GroupRequest.query()
       .select('id', 'groupId', 'userId', 'status')
       .preload('group', (query) => {
