@@ -112,7 +112,7 @@ test.group('Group request', (group) => {
     assert.equal(body.groupRequests.length, 0)
   })
 
-  test('it should return 422 master is not provied', async (assert) => {
+  test('it should return 422 when master is not provied', async (assert) => {
     const master = await UserFactory.create();
     const group = await GroupFactory.merge({ master: master.id }).create()
 
