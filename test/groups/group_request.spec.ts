@@ -3,6 +3,7 @@ import supertest from 'supertest'
 import Database from '@ioc:Adonis/Lucid/Database'
 import { GroupFactory, UserFactory } from 'Database/factories'
 import User from 'App/Models/User'
+import GroupRequest from 'App/Models/GroupRequest'
 
 const BASE_URL = `http://${process.env.HOST}:${process.env.PORT}`
 let token = ''
@@ -180,6 +181,23 @@ test.group('Group request', (group) => {
 
     assert.equal(response.body.code, 'BAD_REQUEST')
     assert.equal(response.body.status, 404)
+  })
+
+  test.only('it shoudl reject a group request', async (assert) => {
+    const master = await UserFactory.create();
+    const group = await GroupFactory.merge({ master: master.id }).create()
+
+    const { body } = await supertest(BASE_URL)
+      .post(`/groups/${group.id}/requests`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({})
+
+    const response = await supertest(BASE_URL)
+      .delete(`/groups/${group.id}/requests/${body.groupRequest.id}`)
+      .expect(200)
+
+    const groupRequest = await GroupRequest.find(body.groupRequest.id)
+    assert.isNull(groupRequest)
   })
 
   group.before(async () => {
