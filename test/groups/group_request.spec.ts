@@ -242,6 +242,41 @@ test.group('Group request', (group) => {
     assert.equal(response.body.status, 404)
   })
 
+  test('it should update a group', async (assert) => {
+    const master = await UserFactory.create();
+    const group = await GroupFactory.merge({ master: master.id }).create();
+
+    const payload = {
+      name: 'test',
+      description: 'test description',
+      schedule: 'every day',
+      location: 'test',
+      chronic: 'test',
+    }
+
+    const { body } = await supertest(BASE_URL)
+      .patch(`/groups/${group.id}`)
+      .send(payload)
+      .expect(200)
+
+    assert.exists(body.group, 'Group undefined')
+    assert.equal(body.group.name, payload.name)
+    assert.equal(body.group.description, payload.description)
+    assert.equal(body.group.schedule, payload.schedule)
+    assert.equal(body.group.location, payload.location)
+    assert.equal(body.group.chronic, payload.chronic)
+  })
+
+  test('it should return 404 when providing an unexisting group for update', async (assert) => {
+    const response = await supertest(BASE_URL)
+      .patch(`/groups/1`)
+      .send({})
+      .expect(404)
+
+    assert.equal(response.body.code, 'BAD_REQUEST')
+    assert.equal(response.body.status, 404)
+  })
+
   group.before(async () => {
     const plainPassword = '1234567'
     const newUser = await UserFactory.merge({ password: plainPassword }).create()
