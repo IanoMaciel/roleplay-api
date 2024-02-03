@@ -68,6 +68,17 @@ test.group('Groups', (group) => {
     assert.equal(body.group.chronic, payload.chronic)
   })
 
+  test('it should return 404 when providing an unexisting group for update', async (assert) => {
+    const response = await supertest(BASE_URL)
+      .patch(`/groups/1`)
+      .send({})
+      .expect(404)
+
+    assert.equal(response.body.code, 'BAD_REQUEST')
+    assert.equal(response.body.status, 404)
+
+  })
+
   group.before(async () => {
     const plainPassword = '1234567'
     const newUser = await UserFactory.merge({ password: plainPassword }).create()
