@@ -106,7 +106,7 @@ test.group('Groups', (group) => {
     assert.isEmpty(group.players)
   })
 
-  test.only('it should not remove the master of the group', async (assert) => {
+  test('it should not remove the master of the group', async (assert) => {
     const groupPayload = {
       name: 'test',
       description: 'test description',
@@ -128,6 +128,35 @@ test.group('Groups', (group) => {
 
     await groupModel.load('players')
     assert.isNotEmpty(groupModel.players)
+  })
+
+  test.only('it should remove the group', async (assert) => {
+    const groupPayload = {
+      name: 'test',
+      description: 'test description',
+      schedule: 'every day',
+      location: 'test',
+      chronic: 'test lalalalallalala',
+      master: user.id
+    }
+    const { body } = await supertest(BASE_URL)
+      .post('/groups')
+      .set('Authorization', `Bearer ${token}`)
+      .send(groupPayload)
+
+    const group = body.group
+
+    await supertest(BASE_URL)
+      .delete(`/groups/${group.id}`)
+      .send({})
+      .expect(200)
+
+    const emptyGroup = await Database.query().from('groups').where('id', group.id)
+    assert.isEmpty(emptyGroup)
+
+    const players = await Database.query().from('groups_users')
+    assert.isEmpty(players)
+
   })
 
   group.before(async () => {
