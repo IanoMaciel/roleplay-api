@@ -33,7 +33,7 @@ test.group('Group request', (group) => {
       .set('Authorization', `Bearer ${token}`)
       .send({})
 
-    const { body } =await supertest(BASE_URL)
+    const { body } = await supertest(BASE_URL)
       .post(`/groups/${group.id}/requests`)
       .set('Authorization', `Bearer ${token}`)
       .send({})
@@ -60,7 +60,7 @@ test.group('Group request', (group) => {
       .set('Authorization', `Bearer ${token}`)
       .send(groupPayload)
 
-    const { body } =await supertest(BASE_URL)
+    const { body } = await supertest(BASE_URL)
       .post(`/groups/${response.body.group.id}/requests`)
       .set('Authorization', `Bearer ${token}`)
       .send({})
