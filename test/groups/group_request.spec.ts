@@ -189,7 +189,7 @@ test.group('Group request', (group) => {
     assert.equal(response.body.status, 404)
   })
 
-  test('it shoudl reject a group request', async (assert) => {
+  test('it should reject a group request', async (assert) => {
     const group = await GroupFactory.merge({ master: user.id }).create()
 
     const { body } = await supertest(BASE_URL)
@@ -197,7 +197,7 @@ test.group('Group request', (group) => {
       .set('Authorization', `Bearer ${token}`)
       .send({})
 
-    const response = await supertest(BASE_URL)
+    await supertest(BASE_URL)
       .delete(`/groups/${group.id}/requests/${body.groupRequest.id}`)
       .set('Authorization', `Bearer ${token}`)
       .expect(200)
