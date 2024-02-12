@@ -27,6 +27,7 @@ export default class GroupsController {
             query.where('id', userId)
           })
           .where('name', 'LIKE', `%${text}%`)
+          .orWhere('description', 'LIKE', `%${text}%`)
       }
     }
 
