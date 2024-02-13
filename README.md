@@ -3,7 +3,13 @@
 
 ## Sobre o Projeto
 
-Roleplay é um sistema de gerenciamento de mesas de RPG (Role Playing Game, do inglês). Cada mesa é liderada por um mestre, responsável por cadastrar a mesa e estabelecer as regras do jogo. Jogadores interessados podem buscar por uma mesa e solicitar ingresso, aguardando a aprovação do mestre para sua solicitação.
+Roleplay é um sistema de gerenciamento de mesas de RPG (*Role Playing Game*, do inglês). Cada mesa é liderada por um mestre, responsável por cadastrar a mesa e estabelecer as regras do jogo. Jogadores interessados podem buscar por uma mesa e solicitar ingresso, aguardando a aprovação do mestre para sua solicitação.
+
+
+## Sobre o Desenvolvimento
+Esta API foi desenvolvida com base na técnica TDD (do inglês, *Test-Driven Development*). O TDD é uma prática de desenvolvimento de software em que a codificação das funcionalidades começa com a escrita de testes unitários.
+
+Para executar os 52 testes, utilize o comando `yarn test`.
 
 ## Requisitos de Software
 
