@@ -7,9 +7,9 @@ Roleplay é um sistema de gerenciamento de mesas de RPG (*Role Playing Game*, do
 
 
 ## Sobre o Desenvolvimento
-Esta API foi desenvolvida com base na técnica TDD (do inglês, *Test-Driven Development*). O TDD é uma prática de desenvolvimento de software em que a codificação das funcionalidades começa com a escrita de testes unitários.
+Esta aplicação foi desenvolvida com base na técnica TDD (do inglês, *Test-Driven Development*). O TDD é uma prática de desenvolvimento de software em que a codificação das funcionalidades começa com a escrita de testes unitários Para executar os 52 testes, utilize o comando `yarn test`.
 
-Para executar os 52 testes, utilize o comando `yarn test`.
+Além disso, para a construção da API, foi utilizado o AdonisJS. O AdonisJS é uma estrutura web baseada em TypeScript para Node.js, que pode ser empregada tanto na criação de aplicativos web full stack quanto na implementação de servidores JSON API.
 
 ## Requisitos de Software
 
